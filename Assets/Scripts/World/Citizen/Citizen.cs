@@ -15,13 +15,13 @@ public class Citizen : MonoBehaviour
     {
         satisfaction.Add(ResourceHolder.ResType.WATER, SatisfactionLevel.FULL);
         satisfaction.Add(ResourceHolder.ResType.FOOD, SatisfactionLevel.FULL);
-        Clock.AddTimer(() => {
+        Clock.AddTimerInstantTrigger(() => {
 
             Consume(ResourceHolder.ResType.FOOD);
-        }, 5);
-        Clock.AddTimer(() => {
+        }, 3);
+        Clock.AddTimerInstantTrigger(() => {
             Consume(ResourceHolder.ResType.WATER);
-        }, 5);
+        }, 3);
     }
 
     // Update is called once per frame

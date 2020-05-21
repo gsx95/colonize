@@ -13,7 +13,7 @@ public class Clock : MonoBehaviour
 
     private Dictionary<string, Timer> timers = new Dictionary<string, Timer>();
 
-    private static float secondsPerIGDay = 300;
+    private static float secondsPerIGDay = 60;
     private static float secondsPerIGHour;
     private void Awake()
     {
@@ -30,11 +30,18 @@ public class Clock : MonoBehaviour
         return id;
     }
 
+    public static string AddTimerInstantTrigger(Action listener, float inGameHours)
+    {
+        listener();
+        return AddTimer(listener, inGameHours);
+    }
+
     public static float CurrentTime(string timerId)
     {
         var timer = Instance.timers[timerId];
         return timer.CurrentTime();
     }
+
     public static void AddOneTimeTimer(Action listener, float inGameHours)
     {
         Instance.activeTimers.Add(new Timer(secondsPerIGHour * inGameHours, true), listener);

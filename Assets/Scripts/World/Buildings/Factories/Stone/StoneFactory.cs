@@ -12,8 +12,4 @@ public class StoneFactory : Factory
         outputs.Add(new ResAmount(ResourceHolder.ResType.STONE, 1));
     }
 
-    new void Start()
-    {
-        base.Start();
-    }
 }

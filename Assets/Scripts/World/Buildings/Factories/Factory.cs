@@ -35,7 +35,6 @@ public class Factory : MonoBehaviour
     }
     public void Start()
     {
-        Debug.Log("start");
         Clock.AddTimer(() => { Produce();  }, productionDurationIGHours);
     }
 
@@ -47,10 +46,6 @@ public class Factory : MonoBehaviour
     protected void Produce()
     {
         float productionPercentage = (float)employees.Count / (float)maxWorkers;
-
-        Debug.Log("producing " + productionPercentage);
-        Debug.Log("empl " + employees.Count);
-        Debug.Log("max " + maxWorkers);
         List<ResAmount> actualInputs = new List<ResAmount>();
         foreach(ResAmount input in inputs)
         {

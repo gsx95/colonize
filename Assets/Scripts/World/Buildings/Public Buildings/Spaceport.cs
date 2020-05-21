@@ -24,6 +24,8 @@ public class Spaceport : Building
         DebugPanel.AddDebug(() => { return ActualArrivals().ToString(); }, "Actual Arrivals");
 
         SpawnNew();
+        Clock.AddOneTimeTimer(() => { SpawnNew(); }, 4);
+        Clock.AddOneTimeTimer(() => { SpawnNew(); }, 8);
     }
 
     // Update is called once per frame

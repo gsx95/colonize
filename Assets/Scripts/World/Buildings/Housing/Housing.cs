@@ -25,4 +25,8 @@ public class Housing : Building {
     public int GetVacantRooms() {
         return rooms - residents.Count;
     }
+
+    public void RemoveResident(Citizen citizen) {
+        residents.Remove(citizen);
+    }
 }

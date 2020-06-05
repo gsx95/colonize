@@ -1,5 +1,65 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1386924996
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1386924997}
+  m_Layer: 8
+  m_Name: Exit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1386924997
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386924996}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.672, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5678676144610285234}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1802408752
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1802408753}
+  m_Layer: 8
+  m_Name: Entrance
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1802408753
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802408752}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.4938, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5678676144610285234}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &9002805090618418674
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15,7 +75,7 @@ PrefabInstance:
     - target: {fileID: 3620566833185731392, guid: 74cd20729ffe77d419cf1a80dd9892df,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.25
+      value: 0.06236716
       objectReference: {fileID: 0}
     - target: {fileID: 3620566833185731392, guid: 74cd20729ffe77d419cf1a80dd9892df,
         type: 3}
@@ -86,7 +146,7 @@ PrefabInstance:
         type: 3}
       propertyPath: building
       value: 
-      objectReference: {fileID: 3397820018753383475, guid: 33123d65f3e8af041838b4dee4cd797c,
+      objectReference: {fileID: 1988742764752080422, guid: 33123d65f3e8af041838b4dee4cd797c,
         type: 3}
     - target: {fileID: 9018835838188713762, guid: 74cd20729ffe77d419cf1a80dd9892df,
         type: 3}
@@ -95,3 +155,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74cd20729ffe77d419cf1a80dd9892df, type: 3}
+--- !u!4 &5678676144610285234 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3620566833185731392, guid: 74cd20729ffe77d419cf1a80dd9892df,
+    type: 3}
+  m_PrefabInstance: {fileID: 9002805090618418674}
+  m_PrefabAsset: {fileID: 0}

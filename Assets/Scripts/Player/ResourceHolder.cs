@@ -8,7 +8,7 @@ public class ResourceHolder : MonoBehaviour {
     private static int waterAlarms = 0;
     private static int alarmTimeHours = 72;
     void Start() {
-        resources.Add(ResType.FOOD, 10);
+        resources.Add(ResType.FOOD, 0);
         resources.Add(ResType.WATER, 10);
         resources.Add(ResType.STONE, 30);
 

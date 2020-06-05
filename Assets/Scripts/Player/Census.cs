@@ -16,4 +16,8 @@ public class Census : MonoBehaviour {
     public static int GetCitizensNum() {
         return citizens.Count;
     }
+
+    public static List<Citizen> GetCitizens() {
+        return citizens;
+    }
 }

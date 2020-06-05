@@ -172,6 +172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entrance: {fileID: 2086541355}
   exit: {fileID: 218972594}
+  bottom: {fileID: 0}
 --- !u!54 &-863788470583314488
 Rigidbody:
   m_ObjectHideFlags: 0

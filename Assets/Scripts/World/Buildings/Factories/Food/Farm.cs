@@ -6,7 +6,4 @@
         outputs.Add(new ResAmount(ResourceHolder.ResType.FOOD, 1));
     }
 
-    new void Start() {
-        base.Start();
-    }
 }

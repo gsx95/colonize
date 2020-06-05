@@ -5,6 +5,7 @@ public class Building : MonoBehaviour {
 
     public GameObject entrance;
     public GameObject exit;
+    public GameObject bottom;
 
     protected List<Citizen> citizens = new List<Citizen>();
 

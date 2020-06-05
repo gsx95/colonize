@@ -19,6 +19,9 @@ public class Citizen : MonoBehaviour {
     public Schedule activeSchedule = Schedule.NONE;
     public Schedule targetSchedule = Schedule.NONE;
 
+
+    private Building currentBuilding;
+
     void Awake() {
         // typical schedule:   8.00 - 17.00 work  |  17.00 - 22.00 leisure time | 22.00 - 8.00 home/sleep
         // + 1 / -2 hours
@@ -32,6 +35,25 @@ public class Citizen : MonoBehaviour {
         }
     }
 
+    public string Name() {
+        return citizenName;
+    }
+
+    public bool HasHome() {
+        return home != null;
+    }
+
+    public bool HasWork() {
+        return work != null;
+    }
+
+    public int GetHunger() {
+        return (int) satisfaction[ResourceHolder.ResType.FOOD];
+    }
+
+    public int GetThirst() {
+        return (int)satisfaction[ResourceHolder.ResType.WATER];
+    }
 
     void Start() {
         satisfaction.Add(ResourceHolder.ResType.WATER, SatisfactionLevel.FULL);
@@ -87,6 +109,7 @@ public class Citizen : MonoBehaviour {
         if(other.gameObject.TryGetComponent(out building)) {
             if(building == walkTarget) {
                 building.CheckIn(this);
+                currentBuilding = building;
                 GetComponent<Renderer>().enabled = false;
                 isWalking = false;
                 activeSchedule = targetSchedule;
@@ -169,6 +192,15 @@ public class Citizen : MonoBehaviour {
     }
 
     private void Die(string reason) {
+        if(currentBuilding) {
+            currentBuilding.CheckOut(this);
+        }
+        if(home != null)
+            home.GetComponent<Housing>().RemoveResident(this);
+        if(work != null)
+            work.GetComponent<Factory>().RemoveEmployee(this);
+        Census.RemoveCitizen(this);
+        ToastBox.ShowMsg(citizenName + " died because of " + reason);
         Destroy(gameObject);
     }
 

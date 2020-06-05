@@ -1,35 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Housing : MonoBehaviour
-{
+public class Housing : Building {
 
     public int rooms = 1;
 
     private List<Citizen> residents = new List<Citizen>();
 
-    void Awake()
-    {
+    void Awake() {
         HousingMarket.AddHouse(this);
     }
-    void Start()
-    {
-        
+    void Start() {
+
     }
 
 
-    void Update()
-    {
-        
+    void Update() {
+
     }
 
-    public void AddResident(Citizen citizen)
-    {
+    public void AddResident(Citizen citizen) {
         residents.Add(citizen);
     }
-    public int GetVacantRooms()
-    {
+    public int GetVacantRooms() {
         return rooms - residents.Count;
     }
 }

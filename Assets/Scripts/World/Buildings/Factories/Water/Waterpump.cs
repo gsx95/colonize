@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Waterpump : Factory
-{
-    new void Awake()
-    {
+public class Waterpump : Factory {
+    new void Awake() {
         base.Awake();
         maxWorkers = 2;
         productionDurationIGHours = 0.4f;

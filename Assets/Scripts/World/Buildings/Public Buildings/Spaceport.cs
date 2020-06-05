@@ -2,8 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class Spaceport : Building
-{
+public class Spaceport : Building {
     public GameObject citizenPrefab;
 
     private static float newCitizenTimerIngameHours = 24;
@@ -12,14 +11,13 @@ public class Spaceport : Building
     private int spawnedCitizen = 0;
 
     public GameObject spawnPosObj;
-    void Start()
-    {
+    void Start() {
         var rnd = new System.Random(DateTime.Now.Millisecond);
         names = names.OrderBy(x => rnd.Next()).ToArray();
 
         string timerId = Clock.AddTimer(TimerEnded, newCitizenTimerIngameHours);
 
-        DebugPanel.AddDebug(() => { return Clock.CurrentTime(timerId).ToString("#.#"); }, "New Arrivals");
+        DebugPanel.AddDebug(() => { return Clock.CurrentTimerState(timerId).ToString("#.#"); }, "New Arrivals");
         DebugPanel.AddDebug(() => { return newCitizensNum.ToString(); }, "Max Arrivals");
         DebugPanel.AddDebug(() => { return ActualArrivals().ToString(); }, "Actual Arrivals");
 
@@ -29,25 +27,21 @@ public class Spaceport : Building
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    void Update() {
+
     }
 
-    private void TimerEnded()
-    {
+    private void TimerEnded() {
         int actualArrivals = ActualArrivals();
-        for (int i = 0;i< actualArrivals; i++)
-        {
+        for (int i = 0; i < actualArrivals; i++) {
             SpawnNew();
         }
     }
 
-    private void SpawnNew()
-    {
-        
+    private void SpawnNew() {
+
         var posY = citizenPrefab.transform.position.y;
-        var newC = Instantiate(citizenPrefab, spawnPosObj.transform.position, Quaternion.identity);
+        var newC = Instantiate(citizenPrefab, exit.transform.position, Quaternion.identity);
         newC.transform.position = new Vector3(newC.transform.position.x, posY, newC.transform.position.z);
         var name = names[spawnedCitizen];
         newC.GetComponent<Citizen>().SetName(name);
@@ -55,20 +49,17 @@ public class Spaceport : Building
         Census.AddCitizen(newC.GetComponent<Citizen>());
     }
 
-    private int ActualArrivals()
-    {
+    private int ActualArrivals() {
         int max = newCitizensNum;
         int freeRooms = HousingMarket.GetVacantPlacesNum();
         int alarmLimit = max;
-        if(ResourceHolder.FoodAlarmLast3Days() || ResourceHolder.WaterAlarmLast3Days())
-        {
+        if (ResourceHolder.FoodAlarmLast3Days() || ResourceHolder.WaterAlarmLast3Days()) {
             //alarmLimit = Mathf.FloorToInt(max * 0.1f);  //TODO: Introduce this only after a couple of citizens arrived. Maybe after 10?
         }
         return Min(freeRooms, alarmLimit, max);
     }
 
-    private static int Min(params int[] values)
-    {
+    private static int Min(params int[] values) {
         return Enumerable.Min(values);
     }
 

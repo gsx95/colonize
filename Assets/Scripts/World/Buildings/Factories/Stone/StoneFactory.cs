@@ -1,11 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class StoneFactory : Factory
-{
-    new void Awake()
-    {
+﻿public class StoneFactory : Factory {
+    new void Awake() {
         base.Awake();
         maxWorkers = 2;
         productionDurationIGHours = 5f;

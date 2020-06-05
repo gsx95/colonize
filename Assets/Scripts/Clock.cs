@@ -1,28 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Timers;
+using System.Net.Http.Headers;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 
-public class Clock : MonoBehaviour
-{
+public class Clock : MonoBehaviour {
 
     private static Clock Instance;
-    
+
+    private GameTime gameTime;
+
     private Dictionary<Timer, Action> activeTimers = new Dictionary<Timer, Action>();
 
     private Dictionary<string, Timer> timers = new Dictionary<string, Timer>();
 
     private static float secondsPerIGDay = 60;
     private static float secondsPerIGHour;
-    private void Awake()
-    {
+    void Awake() {
         Instance = this;
         secondsPerIGHour = secondsPerIGDay / 24;
+        gameTime = new GameTime(8, 0);
     }
 
-    public static string AddTimer(Action listener, float inGameHours)
-    {
+    void Start() {
+        AddTimer(() => {
+            gameTime.NextMinute();
+        }, (1f / 60f));
+        DebugPanel.AddDebug(() => { return GetCurrentTime().ToString(); }, "Time");
+    }
+
+    public static GameTime GetCurrentTime() {
+        return Instance.gameTime;
+    }
+
+    public static string AddTimerInstantTrigger(Action listener, float inGameHours) {
+        listener();
+        return AddTimer(listener, inGameHours);
+    }
+
+    public static string AddTimer(Action listener, float inGameHours) {
         var timer = new Timer(secondsPerIGHour * inGameHours);
         var id = TimerId();
         Instance.timers.Add(id, timer);
@@ -30,79 +47,90 @@ public class Clock : MonoBehaviour
         return id;
     }
 
-    public static string AddTimerInstantTrigger(Action listener, float inGameHours)
-    {
-        listener();
-        return AddTimer(listener, inGameHours);
+    public static string AddTimerMinutes(Action listener, float inGameMinutes) {
+        var timer = new Timer(secondsPerIGHour * inGameMinutes * 60);
+        var id = TimerId();
+        Instance.timers.Add(id, timer);
+        Instance.activeTimers.Add(timer, listener);
+        return id;
     }
 
-    public static float CurrentTime(string timerId)
-    {
+    public static float CurrentTimerState(string timerId) {
         var timer = Instance.timers[timerId];
         return timer.CurrentTime();
     }
-
-    public static void AddOneTimeTimer(Action listener, float inGameHours)
-    {
+    public static void AddOneTimeTimer(Action listener, float inGameHours) {
         Instance.activeTimers.Add(new Timer(secondsPerIGHour * inGameHours, true), listener);
     }
 
-
-    // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         List<Timer> toDelete = new List<Timer>();
         var copy = new Dictionary<Timer, Action>(activeTimers);
-        foreach (Timer timer in copy.Keys)
-        {
+        foreach (Timer timer in copy.Keys) {
             Action listener = copy[timer];
-            if(timer.Update(Time.deltaTime))
-            {
+            if (timer.Update(Time.deltaTime)) {
                 listener();
                 if (timer.OneTime())
                     toDelete.Add(timer);
             }
         }
-        foreach(Timer timer in toDelete)
-        {
+        foreach (Timer timer in toDelete) {
             activeTimers.Remove(timer);
         }
     }
 
-    class Timer
-    {
+    public class GameTime {
+        public int hour = 0;
+        public int minute = 0;
+
+        public GameTime(int hour, int minute) {
+            this.hour = hour;
+            this.minute = minute;
+        }
+
+        public void NextMinute() {
+            minute++;
+            if(minute == 60) {
+                hour++;
+                minute = 0;
+            }
+            if(hour == 24) {
+                hour = 0;
+            }
+        }
+
+        public override string ToString() {
+            return hour.ToString("00") + ":" + minute.ToString("00");
+        }
+    }
+
+    class Timer {
         float targetSeconds;
         float currentSeconds;
         bool oneTime;
 
-        public Timer(float seconds)
-        {
+        public Timer(float seconds) {
             targetSeconds = seconds;
             currentSeconds = seconds;
             oneTime = false;
         }
-        public Timer(float seconds, bool oneTime)
-        {
+        public Timer(float seconds, bool oneTime) {
             targetSeconds = seconds;
             currentSeconds = seconds;
             this.oneTime = oneTime;
         }
 
-        public bool OneTime()
-        {
+        public bool OneTime() {
             return oneTime;
         }
 
-        public float CurrentTime()
-        {
+        public float CurrentTime() {
             return currentSeconds;
         }
 
-        public bool Update(float timeDelta)
-        {
+        public bool Update(float timeDelta) {
             currentSeconds -= timeDelta;
-            if(currentSeconds <= 0)
-            {
+            if (currentSeconds <= 0) {
                 if (!oneTime)
                     currentSeconds = targetSeconds;
                 return true;
@@ -112,8 +140,7 @@ public class Clock : MonoBehaviour
     }
 
     private static System.Random random = new System.Random();
-    private static string TimerId()
-    {
+    private static string TimerId() {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         return new string(Enumerable.Repeat(chars, 50)
           .Select(s => s[random.Next(s.Length)]).ToArray());

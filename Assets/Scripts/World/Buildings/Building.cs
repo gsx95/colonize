@@ -1,26 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Building : MonoBehaviour
-{
+public class Building : MonoBehaviour {
 
-    Vector3 spawnPos;
+    public GameObject entrance;
+    public GameObject exit;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    protected List<Citizen> citizens = new List<Citizen>();
+
+    protected void SpawnCitizen(Citizen citizen) {
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void CheckIn(Citizen citizen) {
+        citizens.Add(citizen);
     }
 
-    protected void SpawnCitizen(Citizen citizen)
-    {
-
+    public void CheckOut(Citizen citizen) {
+        citizens.Remove(citizen);
     }
 }

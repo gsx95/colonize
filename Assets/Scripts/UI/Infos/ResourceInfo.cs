@@ -1,23 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ResourceInfo : MonoBehaviour
-{
+public class ResourceInfo : MonoBehaviour {
 
     public ResourceHolder.ResType resType;
     public string resName;
 
     private Text text;
 
-    void Start()
-    {
+    void Start() {
         text = gameObject.GetComponent<Text>();
     }
- 
-    void Update()
-    {
+
+    void Update() {
         text.text = resName + ": " + ResourceHolder.GetRes(resType);
     }
 }

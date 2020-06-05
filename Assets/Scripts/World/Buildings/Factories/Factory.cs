@@ -1,67 +1,79 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 
-public class Factory : MonoBehaviour
-{
+public class Factory : Building {
 
     protected int maxWorkers = 2;
     protected float productionDurationIGHours = 4;
     protected List<ResAmount> outputs = new List<ResAmount>();
     protected List<ResAmount> inputs = new List<ResAmount>();
-    
     private List<Citizen> employees = new List<Citizen>();
 
+    private float productionRound = 0f;
 
-    public void AddEmployee(Citizen citizen)
-    {
+    public void AddEmployee(Citizen citizen) {
         employees.Add(citizen);
     }
 
-    public void RemoveEmployee(Citizen citizen)
-    {
+    public void RemoveEmployee(Citizen citizen) {
         employees.Remove(citizen);
     }
 
-    public int VacantPositions()
-    {
+    public int VacantPositions() {
         return maxWorkers - employees.Count;
     }
 
-    public void Awake()
-    {
-        LabourOffice.AddEmployer(this);
+    public int getCurrent() {
+        return citizens.Count;
     }
-    public void Start()
-    {
-        Clock.AddTimer(() => { Produce();  }, productionDurationIGHours);
+    public int getEmployees() {
+        return employees.Count;
+    }
+    public int getMax() {
+        return maxWorkers;
+    }
+    public float getValue() {
+        return productionRound / 100f;
     }
 
-    public float CurrentProductivity()
-    {
+    public void Awake() {
+        LabourOffice.AddEmployer(this);
+    }
+    public void Start() {
+        Clock.AddTimer(() => { Produce(); }, (productionDurationIGHours / 60));
+    }
+
+    public float CurrentMaxProductivity() {
         float productionPercentage = (float)employees.Count / (float)maxWorkers;
         return productionPercentage;
     }
-    protected void Produce()
-    {
-        float productionPercentage = (float)employees.Count / (float)maxWorkers;
-        List<ResAmount> actualInputs = new List<ResAmount>();
-        foreach(ResAmount input in inputs)
-        {
-            float actualInput = input.GetAmount() * productionPercentage;
-            actualInputs.Add(new ResAmount(input.GetResType(), actualInput));
-        }
-    
-        List<ResAmount> actualOutputs = new List<ResAmount>();
-        foreach (ResAmount output in outputs)
-        {
-            float actualOutput = output.GetAmount() * productionPercentage;
-            actualOutputs.Add(new ResAmount(output.GetResType(), actualOutput));
+
+    public void ShowInfo() {
+        FactoryInfo.display(this);
+    }
+
+    protected void Produce() {
+        float maxPercentageToAdd = 100f / 60f;
+        float productionPercentage = (float)citizens.Count / (float)maxWorkers;
+        float percentageToAdd = maxPercentageToAdd * productionPercentage;
+        productionRound += percentageToAdd;
+
+        if(productionRound < 100f) {
+            return;
         }
 
-        if (ResourceHolder.CanAfford(actualInputs))
-        {
+        productionRound = 0f;
+        List<ResAmount> actualInputs = new List<ResAmount>();
+        foreach (ResAmount input in inputs) {
+            actualInputs.Add(new ResAmount(input.GetResType(), input.GetAmount()));
+        }
+
+        List<ResAmount> actualOutputs = new List<ResAmount>();
+        foreach (ResAmount output in outputs) {
+            actualOutputs.Add(new ResAmount(output.GetResType(), output.GetAmount()));
+        }
+
+        if (ResourceHolder.CanAfford(actualInputs)) {
             ResourceHolder.Consume(actualInputs);
             ResourceHolder.Produce(actualOutputs);
         }

@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
 
-public class CloseBtn : MonoBehaviour
-{
+public class CloseBtn : MonoBehaviour {
     public GameObject toShow;
 
-    public void Clicked()
-    {
+    public void Clicked() {
         toShow.SetActive(true);
         gameObject.SetActive(false);
         PopupWindow.HidePopup();

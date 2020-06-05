@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &310465076
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 310465077}
+  m_Layer: 8
+  m_Name: Exit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &310465077
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 310465076}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -2.442}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8012257234090387856}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5080352376394663618
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,8 +39,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1574216663833105872}
-  m_Layer: 0
-  m_Name: SpawnPos
+  m_Layer: 8
+  m_Name: Entrance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +72,7 @@ GameObject:
   - component: {fileID: 8012257232325260415}
   - component: {fileID: 8012257232325260412}
   - component: {fileID: 8012257232325260413}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RocketM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +166,7 @@ GameObject:
   - component: {fileID: 8012257233346309705}
   - component: {fileID: 8012257233346309710}
   - component: {fileID: 8012257233346309711}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RocketL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,7 +260,7 @@ GameObject:
   - component: {fileID: 8012257233849619133}
   - component: {fileID: 8012257233849619122}
   - component: {fileID: 8012257233849619123}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -324,7 +354,7 @@ GameObject:
   - component: {fileID: 8012257233962951100}
   - component: {fileID: 8012257233962951101}
   - component: {fileID: 8012257233962951090}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ramp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -418,7 +448,7 @@ GameObject:
   - component: {fileID: 8012257234079556566}
   - component: {fileID: 8012257234079556567}
   - component: {fileID: 8012257234079556564}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RocketR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -512,7 +542,7 @@ GameObject:
   - component: {fileID: 8012257234089208057}
   - component: {fileID: 8012257234089208062}
   - component: {fileID: 8012257234089208063}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -603,9 +633,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8012257234090387856}
   - component: {fileID: 8280923573077528314}
-  m_Layer: 0
+  - component: {fileID: 1092573612}
+  - component: {fileID: 1901026614205641952}
+  m_Layer: 8
   m_Name: Launchpad
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -628,6 +660,7 @@ Transform:
   - {fileID: 8012257232325260402}
   - {fileID: 8012257234079556565}
   - {fileID: 8012257233346309708}
+  - {fileID: 310465077}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -643,6 +676,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdec98756aa079c4fa43e4a6ffd46bb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entrance: {fileID: 5080352376394663618}
+  exit: {fileID: 310465076}
   citizenPrefab: {fileID: 2664292208011795951, guid: 6f33d6d78e71d2e42ade3d255e9bb10c,
     type: 3}
   spawnPosObj: {fileID: 5080352376394663618}
+--- !u!65 &1092573612
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8012257234090387857}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.33077377, y: 36.394016, z: 3.5896802}
+  m_Center: {x: 0.0017505522, y: 16.65261, z: -0.1657451}
+--- !u!54 &1901026614205641952
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8012257234090387857}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

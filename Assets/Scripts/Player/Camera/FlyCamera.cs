@@ -1,20 +1,16 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class FlyCamera : MonoBehaviour
-{
+public class FlyCamera : MonoBehaviour {
 
     private const float SPEED = 10.0f;
 
-    void Update()
-    {
+    void Update() {
         Vector3 p = GetTranslation();
         p *= Time.deltaTime;
         transform.Translate(p);
     }
 
-    private Vector3 GetTranslation()
-    {
+    private Vector3 GetTranslation() {
         Vector3 p_Velocity = new Vector3();
 
         // Forwards

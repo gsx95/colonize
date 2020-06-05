@@ -85,6 +85,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PH_Stonefactory
       objectReference: {fileID: 0}
+    - target: {fileID: 2988437084770608183, guid: 844b6227b77c0df408c08b7ec998d023,
+        type: 3}
+      propertyPath: m_TagString
+      value: Building
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1310382747213359738, guid: 844b6227b77c0df408c08b7ec998d023, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 844b6227b77c0df408c08b7ec998d023, type: 3}

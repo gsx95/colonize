@@ -5,7 +5,7 @@ using UnityEngine;
 public class Spaceport : Building {
     public GameObject citizenPrefab;
 
-    private static float newCitizenTimerIngameHours = 24;
+    private static float newCitizenTimerIngameHours = 24; //should be 72
     private int newCitizensNum = 1;
 
     private int spawnedCitizen = 0;
@@ -21,9 +21,9 @@ public class Spaceport : Building {
         DebugPanel.AddDebug(() => { return newCitizensNum.ToString(); }, "Max Arrivals");
         DebugPanel.AddDebug(() => { return ActualArrivals().ToString(); }, "Actual Arrivals");
 
-        SpawnNew();
-        Clock.AddOneTimeTimer(() => { SpawnNew(); }, 4);
-        Clock.AddOneTimeTimer(() => { SpawnNew(); }, 8);
+        SpawnNew(8);
+        Clock.AddOneTimeTimer(() => { SpawnNew(9); }, 4);
+        Clock.AddOneTimeTimer(() => { SpawnNew(9); }, 8);
     }
 
     // Update is called once per frame
@@ -38,7 +38,7 @@ public class Spaceport : Building {
         }
     }
 
-    private void SpawnNew() {
+    private void SpawnNew(int workStart = -1) {
 
         var posY = citizenPrefab.transform.position.y;
         var newC = Instantiate(citizenPrefab, exit.transform.position, Quaternion.identity);
@@ -47,6 +47,10 @@ public class Spaceport : Building {
         newC.GetComponent<Citizen>().SetName(name);
         spawnedCitizen++;
         Census.AddCitizen(newC.GetComponent<Citizen>());
+        ToastBox.ShowMsg(newC.GetComponent<Citizen>().Name() + " arrived.");
+        if(workStart != -1) {
+            newC.GetComponent<Citizen>().ChangeSchedule(workStart);
+        }
     }
 
     private int ActualArrivals() {

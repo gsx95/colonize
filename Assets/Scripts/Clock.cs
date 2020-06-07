@@ -20,7 +20,7 @@ public class Clock : MonoBehaviour {
     void Awake() {
         Instance = this;
         secondsPerIGHour = secondsPerIGDay / 24;
-        gameTime = new GameTime(8, 0);
+        gameTime = new GameTime(7, 0);
     }
 
     void Start() {

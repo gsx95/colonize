@@ -2,8 +2,8 @@
     new void Awake() {
         base.Awake();
         maxWorkers = 2;
-        productionDurationIGHours = 5f;
-        outputs.Add(new ResAmount(ResourceHolder.ResType.STONE, 1));
+        productionDurationIGHours = 0.75f;
+        outputs.Add(new ResAmount(ResourceHolder.ResType.STONE, 2));
     }
 
 }

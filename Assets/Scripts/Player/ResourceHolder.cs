@@ -8,9 +8,9 @@ public class ResourceHolder : MonoBehaviour {
     private static int waterAlarms = 0;
     private static int alarmTimeHours = 72;
     void Start() {
-        resources.Add(ResType.FOOD, 0);
-        resources.Add(ResType.WATER, 10);
-        resources.Add(ResType.STONE, 30);
+        resources.Add(ResType.FOOD, 100);
+        resources.Add(ResType.WATER, 100);
+        resources.Add(ResType.STONE, 60);
 
         DebugPanel.AddDebug(() => {
             return foodAlarms;
@@ -47,11 +47,11 @@ public class ResourceHolder : MonoBehaviour {
     }
 
     private bool FoodLow() {
-        return resources[ResType.FOOD] < Census.GetCitizensNum() * 5 * 2;
+        return resources[ResType.FOOD] < Census.GetCitizensNum() * 5;
     }
 
     private bool WaterLow() {
-        return resources[ResType.WATER] < Census.GetCitizensNum() * 5 * 2;
+        return resources[ResType.WATER] < Census.GetCitizensNum() * 5;
     }
 
     public static bool CanAfford(List<ResAmount> costs) {

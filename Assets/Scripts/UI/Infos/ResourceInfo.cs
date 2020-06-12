@@ -13,6 +13,6 @@ public class ResourceInfo : MonoBehaviour {
     }
 
     void Update() {
-        text.text = resName + ": " + ResourceHolder.GetRes(resType).ToString("##.##");
+        text.text = resName + ": " + ResourceHolder.GetRes(resType).ToString("00");
     }
 }

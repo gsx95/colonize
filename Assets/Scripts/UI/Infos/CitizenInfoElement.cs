@@ -35,4 +35,23 @@ public class CitizenInfoElement : MonoBehaviour
             thirst.SetStatus(citizen.GetThirst());
         }
     }
+
+    public void Clicked()
+    {
+        Vector3 homePos = new Vector3(0, 0, 0);
+        Vector3 workPos = new Vector3(0, 0, 0);
+        if (citizen.Home()) {
+            var hPos = citizen.Home().transform.position;
+            hPos.y += 1;
+            homePos = Camera.main.WorldToScreenPoint(hPos);
+        }
+        if(citizen.Workplace())
+        {
+            var wPos = citizen.Workplace().transform.position;
+            wPos.y += 1;
+            workPos = Camera.main.WorldToScreenPoint(wPos);
+        }
+        UIController.ShowCitizenArrows(homePos, workPos);
+
+    }
 }

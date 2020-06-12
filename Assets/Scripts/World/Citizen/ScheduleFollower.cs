@@ -42,6 +42,16 @@ public class ScheduleFollower : MonoBehaviour
             Walk();
     }
 
+    public Building Home()
+    {
+        return home;
+    }
+
+    public Building Workplace()
+    {
+        return work;
+    }
+
     // Schedule //
 
     public void ChangeSchedule(int workStart) {

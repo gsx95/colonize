@@ -11,7 +11,7 @@ public class Clock : MonoBehaviour {
 
     private GameTime gameTime;
 
-    private Dictionary<Timer, Action> activeTimers = new Dictionary<Timer, Action>();
+    private Dictionary<Timer, Action<string>> activeTimers = new Dictionary<Timer, Action<string>>();
 
     private Dictionary<string, Timer> timers = new Dictionary<string, Timer>();
 
@@ -20,13 +20,13 @@ public class Clock : MonoBehaviour {
     void Awake() {
         Instance = this;
         secondsPerIGHour = secondsPerIGDay / 24;
-        gameTime = new GameTime(7, 0);
+        gameTime = new GameTime(0);
     }
 
     void Start() {
-        AddTimer(() => {
-            gameTime.NextMinute();
-        }, (1f / 60f));
+        AddTimer((a) => {
+            gameTime.NextHalfHour();
+        }, 0.5f);
         DebugPanel.AddDebug(() => { return GetCurrentTime().ToString(); }, "Time");
     }
 
@@ -34,22 +34,23 @@ public class Clock : MonoBehaviour {
         return Instance.gameTime;
     }
 
-    public static string AddTimerInstantTrigger(Action listener, float inGameHours) {
-        listener();
-        return AddTimer(listener, inGameHours);
+    public static string AddTimerInstantTrigger(Action<string> listener, float inGameHours) {
+        string timerId = AddTimer(listener, inGameHours);
+        listener(timerId);
+        return timerId;
     }
 
-    public static string AddTimer(Action listener, float inGameHours) {
-        var timer = new Timer(secondsPerIGHour * inGameHours);
+    public static string AddTimer(Action<string> listener, float inGameHours){
         var id = TimerId();
+        var timer = new Timer(secondsPerIGHour * inGameHours, id);
         Instance.timers.Add(id, timer);
         Instance.activeTimers.Add(timer, listener);
         return id;
     }
 
-    public static string AddTimerMinutes(Action listener, float inGameMinutes) {
-        var timer = new Timer(secondsPerIGHour * inGameMinutes * 60);
+    public static string AddTimerMinutes(Action<string> listener, float inGameMinutes) {
         var id = TimerId();
+        var timer = new Timer(secondsPerIGHour * inGameMinutes * 60, id);
         Instance.timers.Add(id, timer);
         Instance.activeTimers.Add(timer, listener);
         return id;
@@ -59,17 +60,18 @@ public class Clock : MonoBehaviour {
         var timer = Instance.timers[timerId];
         return timer.CurrentTime();
     }
-    public static void AddOneTimeTimer(Action listener, float inGameHours) {
-        Instance.activeTimers.Add(new Timer(secondsPerIGHour * inGameHours, true), listener);
+    public static void AddOneTimeTimer(Action<string> listener, float inGameHours) {
+        var id = TimerId();
+        Instance.activeTimers.Add(new Timer(secondsPerIGHour * inGameHours, id, true), listener);
     }
 
     void Update() {
         List<Timer> toDelete = new List<Timer>();
-        var copy = new Dictionary<Timer, Action>(activeTimers);
+        var copy = new Dictionary<Timer, Action<string>>(activeTimers);
         foreach (Timer timer in copy.Keys) {
-            Action listener = copy[timer];
+            Action<string> listener = copy[timer];
             if (timer.Update(Time.deltaTime)) {
-                listener();
+                listener(timer.id);
                 if (timer.OneTime())
                     toDelete.Add(timer);
             }
@@ -82,25 +84,27 @@ public class Clock : MonoBehaviour {
     public class GameTime {
         public int hour = 0;
         public int minute = 0;
+        public int day = 1;
 
-        public GameTime(int hour, int minute) {
+        public GameTime(int hour) {
             this.hour = hour;
-            this.minute = minute;
         }
 
-        public void NextMinute() {
-            minute++;
-            if(minute == 60) {
-                hour++;
+        public void NextHalfHour() {
+            minute += 30;
+            if(minute == 60)
+            {
                 minute = 0;
+                hour++;
             }
             if(hour == 24) {
                 hour = 0;
+                day++;
             }
         }
 
         public override string ToString() {
-            return hour.ToString("00") + ":" + minute.ToString("00");
+            return "[" + day.ToString() + "]   " + hour.ToString("00") + ":" + minute.ToString("00");
         }
     }
 
@@ -108,16 +112,20 @@ public class Clock : MonoBehaviour {
         float targetSeconds;
         float currentSeconds;
         bool oneTime;
+        public string id;
 
-        public Timer(float seconds) {
+
+        public Timer(float seconds, string id) {
             targetSeconds = seconds;
             currentSeconds = seconds;
             oneTime = false;
+            this.id = id;
         }
-        public Timer(float seconds, bool oneTime) {
+        public Timer(float seconds, string id, bool oneTime) {
             targetSeconds = seconds;
             currentSeconds = seconds;
             this.oneTime = oneTime;
+            this.id = id;
         }
 
         public bool OneTime() {

@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Factory : Building {
 
     protected int maxWorkers = 2;
-    protected float productionDurationIGHours = 4;
+    protected float productionDurationPerWorkerIGHours = 4;
     protected List<ResAmount> outputs = new List<ResAmount>();
     protected List<ResAmount> inputs = new List<ResAmount>();
     private List<Citizen> employees = new List<Citizen>();
@@ -40,7 +41,7 @@ public class Factory : Building {
         LabourOffice.AddEmployer(this);
     }
     public void Start() {
-        Clock.AddTimer(() => { Produce(); }, (productionDurationIGHours / 60));
+        Clock.AddTimer((id) => { Produce(); }, productionDurationPerWorkerIGHours / 10f);
     }
 
     public float CurrentMaxProductivity() {
@@ -52,16 +53,27 @@ public class Factory : Building {
         FactoryInfo.display(this);
     }
 
+    private float CitizenFactor()
+    {
+        float val = 0f;
+        foreach(Citizen c in citizens)
+        {
+            float hungerFactor = ((float)c.GetHunger() / 3f);
+            float thirstFactor = ((float)c.GetThirst() / 3f);
+            float min = Mathf.Min(hungerFactor, thirstFactor);
+            val += min;
+        }
+        return val;
+    }
+
     protected void Produce() {
-        float maxPercentageToAdd = 100f / 60f;
-        float productionPercentage = (float)citizens.Count / (float)maxWorkers;
-        float percentageToAdd = maxPercentageToAdd * productionPercentage;
+        float maxPercentageToAdd = 100f / 10f;
+        float percentageToAdd = maxPercentageToAdd * CitizenFactor();
         productionRound += percentageToAdd;
 
         if(productionRound < 100f) {
             return;
         }
-
         productionRound = 0f;
         List<ResAmount> actualInputs = new List<ResAmount>();
         foreach (ResAmount input in inputs) {

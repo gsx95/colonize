@@ -32,11 +32,6 @@ public class ScheduleFollower : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        
-    }
-
     public void Update()
     {
         if (home == null || work == null) {
@@ -64,6 +59,7 @@ public class ScheduleFollower : MonoBehaviour
         pos.y = transform.position.y;
         transform.position = Vector3.MoveTowards(transform.position, pos, step);
     }
+
     private void SetSchedule() {
         var currentTime = Clock.GetCurrentTime();
 
@@ -100,43 +96,68 @@ public class ScheduleFollower : MonoBehaviour
     private void SleepTime() {
         if (targetSchedule == Schedule.SLEEP)
             return;
-        if (isWalking == false && walkTarget != null && activeSchedule != Schedule.SLEEP) {
+        bool isInWrongBuilding = (isWalking == false && walkTarget != null && activeSchedule != Schedule.SLEEP);
+        if (isInWrongBuilding) {
             transform.position = walkTarget.exit.transform.position;
             walkTarget.CheckOut(me);
         }
-        walkTarget = home;
-        isWalking = true;
-        GetComponent<Renderer>().enabled = true;
-        targetSchedule = Schedule.SLEEP;
-        activeSchedule = Schedule.NONE;
+        if(isInWrongBuilding || activeSchedule == Schedule.NONE) {
+            walkTarget = home;
+            isWalking = true;
+            GetComponent<Renderer>().enabled = true;
+            targetSchedule = Schedule.SLEEP;
+            activeSchedule = Schedule.NONE;
+        }
     }
 
-    private void LeisureTime() {
+    private void LeisureTime()
+    {
         if (targetSchedule == Schedule.LEISURE)
             return;
-        if (isWalking == false && walkTarget != null && activeSchedule != Schedule.LEISURE) {
+        bool isInWrongBuilding = (isWalking == false && walkTarget != null && activeSchedule != Schedule.LEISURE);
+        if (isInWrongBuilding)
+        {
             transform.position = walkTarget.exit.transform.position;
             walkTarget.CheckOut(me);
         }
-        walkTarget = home;
-        isWalking = true;
-        GetComponent<Renderer>().enabled = true;
-        targetSchedule = Schedule.LEISURE;
-        activeSchedule = Schedule.NONE;
+        if (isInWrongBuilding || activeSchedule == Schedule.NONE)
+        {
+            targetSchedule = Schedule.LEISURE;
+            activeSchedule = Schedule.NONE;
+
+            var nextTarget = home;
+            if (walkTarget == nextTarget)
+            {
+                activeSchedule = targetSchedule;
+            }
+            else
+            {
+                walkTarget = home;
+                isWalking = true;
+                GetComponent<Renderer>().enabled = true;
+            }
+        }
     }
 
-    private void WorkTime() {
+    private void WorkTime()
+    {
         if (targetSchedule == Schedule.WORK)
             return;
-        if (isWalking == false && walkTarget != null && activeSchedule != Schedule.WORK) {
+        bool isInWrongBuilding = (isWalking == false && walkTarget != null && activeSchedule != Schedule.WORK);
+        if (isInWrongBuilding)
+        {
             transform.position = walkTarget.exit.transform.position;
             walkTarget.CheckOut(me);
         }
-        walkTarget = work;
-        isWalking = true;
-        GetComponent<Renderer>().enabled = true;
-        targetSchedule = Schedule.WORK;
-        activeSchedule = Schedule.NONE;
+        if (isInWrongBuilding || activeSchedule == Schedule.NONE)
+        {
+            walkTarget = work;
+            isWalking = true;
+            GetComponent<Renderer>().enabled = true;
+            targetSchedule = Schedule.WORK;
+            activeSchedule = Schedule.NONE;
+        }
+
     }
 
     private void SearchHomeAndWork() {

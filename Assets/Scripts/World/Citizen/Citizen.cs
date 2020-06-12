@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -7,27 +8,19 @@ public class Citizen : ScheduleFollower {
     private Dictionary<ResourceHolder.ResType, SatisfactionLevel> satisfaction = new Dictionary<ResourceHolder.ResType, SatisfactionLevel>();
     private string citizenName;
 
-    private bool ateLastTime = false;
-    private bool drunkLastTime = false;
+    void Awake()
+    {
+        base.me = this;
+    }
 
     void Start() {
         satisfaction.Add(ResourceHolder.ResType.WATER, SatisfactionLevel.FULL);
         satisfaction.Add(ResourceHolder.ResType.FOOD, SatisfactionLevel.FULL);
-        Clock.AddTimerInstantTrigger(() => {
-            if((activeSchedule == Schedule.SLEEP && !ateLastTime) || activeSchedule != Schedule.SLEEP) {
-                ateLastTime = true;
-                Consume(ResourceHolder.ResType.FOOD);
-            } else {
-                ateLastTime = false;
-            }
+        string TID = Clock.AddTimerInstantTrigger((id) => {
+            Consume(ResourceHolder.ResType.FOOD, 0.25f);
         }, 3);
-        Clock.AddTimerInstantTrigger(() => {
-            if ((activeSchedule == Schedule.SLEEP && !drunkLastTime) || activeSchedule != Schedule.SLEEP) {
-                drunkLastTime = true;
-                Consume(ResourceHolder.ResType.WATER);
-            } else {
-                drunkLastTime = false;
-            }
+        Clock.AddTimerInstantTrigger((id) => {
+            Consume(ResourceHolder.ResType.WATER, 0.25f);
         }, 3);
     }
 
@@ -47,8 +40,8 @@ public class Citizen : ScheduleFollower {
         }
     }
 
-    private void Consume(ResourceHolder.ResType resType) {
-        var satisfiying = ResourceHolder.Consume(resType);
+    private void Consume(ResourceHolder.ResType resType, float amount=1f) {
+        var satisfiying = ResourceHolder.ConsumeAllLeft(resType, amount);
         if (satisfiying) {
             var currentLevel = satisfaction[resType];
             if (currentLevel == SatisfactionLevel.FULL)

@@ -8,8 +8,8 @@ public class ResourceHolder : MonoBehaviour {
     private static int waterAlarms = 0;
     private static int alarmTimeHours = 72;
     void Start() {
-        resources.Add(ResType.FOOD, 100);
-        resources.Add(ResType.WATER, 100);
+        resources.Add(ResType.FOOD, 4);
+        resources.Add(ResType.WATER, 4);
         resources.Add(ResType.STONE, 60);
 
         DebugPanel.AddDebug(() => {
@@ -19,17 +19,17 @@ public class ResourceHolder : MonoBehaviour {
             return waterAlarms;
         }, "Water Alarms");
 
-        Clock.AddTimer(() => {
+        Clock.AddTimer((id) => {
             if (FoodLow()) {
                 foodAlarms++;
-                Clock.AddOneTimeTimer(() => { foodAlarms--; }, alarmTimeHours);
+                Clock.AddOneTimeTimer((nid) => { foodAlarms--; }, alarmTimeHours);
             }
         }, 1);
 
-        Clock.AddTimer(() => {
+        Clock.AddTimer((id) => {
             if (WaterLow()) {
                 waterAlarms++;
-                Clock.AddOneTimeTimer(() => { waterAlarms--; }, alarmTimeHours);
+                Clock.AddOneTimeTimer((nid) => { waterAlarms--; }, alarmTimeHours);
             }
         }, 1);
     }
@@ -47,11 +47,11 @@ public class ResourceHolder : MonoBehaviour {
     }
 
     private bool FoodLow() {
-        return resources[ResType.FOOD] < Census.GetCitizensNum() * 5;
+        return resources[ResType.FOOD] < Census.GetCitizensNum() * 4;
     }
 
     private bool WaterLow() {
-        return resources[ResType.WATER] < Census.GetCitizensNum() * 5;
+        return resources[ResType.WATER] < Census.GetCitizensNum() * 4;
     }
 
     public static bool CanAfford(List<ResAmount> costs) {
@@ -62,6 +62,21 @@ public class ResourceHolder : MonoBehaviour {
         }
         return true;
     }
+
+    public static bool ConsumeAllLeft(ResType resType, float amount = 1)
+    {
+        var old = resources[resType];
+        if (old == 0)
+            return false;
+        if(old < amount)  {
+            resources[resType] = 0;
+            return false;
+        }
+        var newNum = old - amount;
+        resources[resType] = newNum;
+        return true;
+    }
+
     public static bool Consume(ResType resType, float amount = 1) {
         var old = resources[resType];
         if (old < amount)

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Spaceport : Building {
     public GameObject citizenPrefab;
 
-    private static float newCitizenTimerIngameHours = 24; //should be 72
+    private static float newCitizenTimerIngameHours = 72;
     private int newCitizensNum = 1;
 
     private int spawnedCitizen = 0;
@@ -22,8 +22,8 @@ public class Spaceport : Building {
         DebugPanel.AddDebug(() => { return ActualArrivals().ToString(); }, "Actual Arrivals");
 
         SpawnNew(8);
-        Clock.AddOneTimeTimer(() => { SpawnNew(9); }, 4);
-        Clock.AddOneTimeTimer(() => { SpawnNew(9); }, 8);
+        Clock.AddOneTimeTimer((s) => { SpawnNew(8); }, 4);
+        Clock.AddOneTimeTimer((s) => { SpawnNew(8); }, 8);
     }
 
     // Update is called once per frame
@@ -31,7 +31,7 @@ public class Spaceport : Building {
 
     }
 
-    private void TimerEnded() {
+    private void TimerEnded(string id) {
         int actualArrivals = ActualArrivals();
         for (int i = 0; i < actualArrivals; i++) {
             SpawnNew();
@@ -57,8 +57,8 @@ public class Spaceport : Building {
         int max = newCitizensNum;
         int freeRooms = HousingMarket.GetVacantPlacesNum();
         int alarmLimit = max;
-        if (ResourceHolder.FoodAlarmLast3Days() || ResourceHolder.WaterAlarmLast3Days()) {
-            //alarmLimit = Mathf.FloorToInt(max * 0.1f);  //TODO: Introduce this only after a couple of citizens arrived. Maybe after 10?
+        if (Census.GetCitizensNum() > 9 && (ResourceHolder.FoodAlarmLast3Days() || ResourceHolder.WaterAlarmLast3Days())) {
+            alarmLimit = Mathf.FloorToInt(max * 0.25f);
         }
         return Min(freeRooms, alarmLimit, max);
     }

@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class UIController : MonoBehaviour
@@ -7,8 +7,13 @@ public class UIController : MonoBehaviour
 
     public GameObject arrowHome;
     public GameObject arrowWork;
+    public GameObject arrowCitizen;
 
     private static UIController Instance;
+
+    private Func<Vector3> homeFunc = null;
+    private Func<Vector3> workFunc = null;
+    private Func<Vector3> citizenFunc = null;
 
     void Awake()
     {
@@ -18,38 +23,54 @@ public class UIController : MonoBehaviour
     {
         arrowHome.SetActive(false);
         arrowWork.SetActive(false);
+        arrowCitizen.SetActive(false);
     }
 
     void Update()
     {
-        
-    }
-
-    public static void ShowCitizenArrows(Vector3 homePos, Vector3 workPos)
-    {
-        Instance.ShowArrowsShortly(homePos, workPos);
-    }
-
-    private void ShowArrowsShortly(Vector3 homePos, Vector3 workPos)
-    {
-        StartCoroutine(ShowArrows(homePos, workPos));
-    }
-
-    private IEnumerator ShowArrows(Vector3 homePos, Vector3 workPos)
-    {
-        if (homePos.x != 0 || homePos.y != 0 || homePos.z != 0)
+        if (homeFunc != null)
         {
-            arrowHome.transform.position = homePos;
+            var homePos = homeFunc();
+            arrowHome.transform.position = Camera.main.WorldToScreenPoint(homePos);
             arrowHome.SetActive(true);
         }
 
-        if (workPos.x != 0 || workPos.y != 0 || workPos.z != 0)
+        if (workFunc != null)
         {
-            arrowWork.transform.position = workPos;
+            var workPos = workFunc();
+            arrowWork.transform.position = Camera.main.WorldToScreenPoint(workPos);
             arrowWork.SetActive(true);
         }
-        yield return new WaitForSeconds(0.5f);
+
+        if (citizenFunc != null)
+        {
+            var citizenPos = citizenFunc();
+            arrowCitizen.transform.position = Camera.main.WorldToScreenPoint(citizenPos);
+            arrowCitizen.SetActive(true);
+        }
+    }
+
+    public static void ShowCitizenArrows(Func<Vector3> citizenPosFunc, Func<Vector3> homePosFunc, Func<Vector3> workPosFunc)
+    {
+        Instance.ShowArrowsShortly(citizenPosFunc, homePosFunc, workPosFunc);
+    }
+
+    private void ShowArrowsShortly(Func<Vector3> citizenPosFunc, Func<Vector3> homePosFunc, Func<Vector3> workPosFunc)
+    {
+        StartCoroutine(ShowArrows(citizenPosFunc, homePosFunc, workPosFunc));
+    }
+
+    private IEnumerator ShowArrows(Func<Vector3> citizenPosFunc, Func<Vector3> homePosFunc, Func<Vector3> workPosFunc)
+    {
+        this.homeFunc = homePosFunc;
+        this.workFunc = workPosFunc;
+        this.citizenFunc = citizenPosFunc;
+        yield return new WaitForSeconds(1f);
+        this.homeFunc = null;
+        this.workFunc = null;
+        this.citizenFunc = null;
         arrowHome.SetActive(false);
         arrowWork.SetActive(false);
+        arrowCitizen.SetActive(false);
     }
 }

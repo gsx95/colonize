@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,20 +39,26 @@ public class CitizenInfoElement : MonoBehaviour
 
     public void Clicked()
     {
-        Vector3 homePos = new Vector3(0, 0, 0);
-        Vector3 workPos = new Vector3(0, 0, 0);
+        Func<Vector3> homePosFunc = null;
+        Func<Vector3> workPosFunc = null;
         if (citizen.Home()) {
-            var hPos = citizen.Home().transform.position;
-            hPos.y += 1;
-            homePos = Camera.main.WorldToScreenPoint(hPos);
+            homePosFunc = () =>
+            {
+                var pos = citizen.Home().transform.position;
+                pos.y += 1;
+                return pos;
+            };
         }
         if(citizen.Workplace())
         {
-            var wPos = citizen.Workplace().transform.position;
-            wPos.y += 1;
-            workPos = Camera.main.WorldToScreenPoint(wPos);
+            workPosFunc = () =>
+            {
+                var pos = citizen.Workplace().transform.position;
+                pos.y += 1;
+                return pos;
+            };
         }
-        UIController.ShowCitizenArrows(homePos, workPos);
+        UIController.ShowCitizenArrows(() => { return citizen.transform.position + new Vector3(0, 0.5f, 0); }, homePosFunc, workPosFunc);
 
     }
 }

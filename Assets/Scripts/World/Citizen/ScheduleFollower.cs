@@ -47,11 +47,28 @@ public class ScheduleFollower : MonoBehaviour
         return home;
     }
 
+    public void SetHome(Housing house)
+    {
+        home.GetComponent<Housing>().RemoveResident(me);
+        home = house;
+        walkTarget = null;
+        targetSchedule = Schedule.NONE;
+        activeSchedule = Schedule.NONE;
+    }
+
     public Building Workplace()
     {
         return work;
     }
 
+    public void SetWork(Factory factory)
+    {
+        work.GetComponent<Factory>().RemoveEmployee(me);
+        work = factory;
+        walkTarget = null;
+        targetSchedule = Schedule.NONE;
+        activeSchedule = Schedule.NONE;
+    }
     // Schedule //
 
     public void ChangeSchedule(int workStart) {

@@ -39,26 +39,7 @@ public class CitizenInfoElement : MonoBehaviour
 
     public void Clicked()
     {
-        Func<Vector3> homePosFunc = null;
-        Func<Vector3> workPosFunc = null;
-        if (citizen.Home()) {
-            homePosFunc = () =>
-            {
-                var pos = citizen.Home().transform.position;
-                pos.y += 1;
-                return pos;
-            };
-        }
-        if(citizen.Workplace())
-        {
-            workPosFunc = () =>
-            {
-                var pos = citizen.Workplace().transform.position;
-                pos.y += 1;
-                return pos;
-            };
-        }
-        UIController.ShowCitizenArrows(() => { return citizen.transform.position + new Vector3(0, 0.5f, 0); }, homePosFunc, workPosFunc);
+        CitizenInfoWindow.ShowCitizen(citizen);
 
     }
 }

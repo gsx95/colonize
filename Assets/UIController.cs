@@ -50,27 +50,31 @@ public class UIController : MonoBehaviour
         }
     }
 
-    public static void ShowCitizenArrows(Func<Vector3> citizenPosFunc, Func<Vector3> homePosFunc, Func<Vector3> workPosFunc)
+    public static void HideArrows()
     {
-        Instance.ShowArrowsShortly(citizenPosFunc, homePosFunc, workPosFunc);
+        Instance.HideAllArrows();
     }
 
-    private void ShowArrowsShortly(Func<Vector3> citizenPosFunc, Func<Vector3> homePosFunc, Func<Vector3> workPosFunc)
+    private void HideAllArrows()
     {
-        StartCoroutine(ShowArrows(citizenPosFunc, homePosFunc, workPosFunc));
-    }
-
-    private IEnumerator ShowArrows(Func<Vector3> citizenPosFunc, Func<Vector3> homePosFunc, Func<Vector3> workPosFunc)
-    {
-        this.homeFunc = homePosFunc;
-        this.workFunc = workPosFunc;
-        this.citizenFunc = citizenPosFunc;
-        yield return new WaitForSeconds(1f);
         this.homeFunc = null;
         this.workFunc = null;
         this.citizenFunc = null;
         arrowHome.SetActive(false);
         arrowWork.SetActive(false);
         arrowCitizen.SetActive(false);
+    }
+
+    public static void ShowCitizenArrows(Func<Vector3> citizenPosFunc, Func<Vector3> homePosFunc, Func<Vector3> workPosFunc)
+    {
+        Instance.ShowArrows(citizenPosFunc, homePosFunc, workPosFunc);
+    }
+
+    private void ShowArrows(Func<Vector3> citizenPosFunc, Func<Vector3> homePosFunc, Func<Vector3> workPosFunc)
+    {
+        this.homeFunc = homePosFunc;
+        this.workFunc = workPosFunc;
+        this.citizenFunc = citizenPosFunc;
+
     }
 }

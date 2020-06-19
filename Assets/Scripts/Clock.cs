@@ -60,6 +60,13 @@ public class Clock : MonoBehaviour {
         var timer = Instance.timers[timerId];
         return timer.CurrentTime();
     }
+
+    public static float CurrentTimerPercentage(string timerId)
+    {
+        var timer = Instance.timers[timerId];
+        return timer.Percentage();
+    }
+
     public static void AddOneTimeTimer(Action<string> listener, float inGameHours) {
         var id = TimerId();
         Instance.activeTimers.Add(new Timer(secondsPerIGHour * inGameHours, id, true), listener);
@@ -134,6 +141,11 @@ public class Clock : MonoBehaviour {
 
         public float CurrentTime() {
             return currentSeconds;
+        }
+
+        public float Percentage()
+        {
+            return currentSeconds / targetSeconds;
         }
 
         public bool Update(float timeDelta) {

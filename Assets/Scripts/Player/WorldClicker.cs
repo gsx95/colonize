@@ -23,6 +23,18 @@ public class WorldClicker : MonoBehaviour
                     Factory factory;
                     if(hit.collider.gameObject.TryGetComponent<Factory>(out factory)) {
                         factory.ShowInfo();
+                        return;
+                    }
+                    Spaceport spaceport;
+                    if (hit.collider.gameObject.TryGetComponent<Spaceport>(out spaceport)) {
+                        spaceport.ShowInfo();
+                        return;
+                    }
+                    Housing housing;
+                    if (hit.collider.gameObject.TryGetComponent<Housing>(out housing))
+                    {
+                        HousingInfo.Show(housing);
+                        return;
                     }
                 }
             }

@@ -26,6 +26,16 @@ public class Housing : Building {
         return rooms - residents.Count;
     }
 
+    public int GetMaxRooms()
+    {
+        return rooms;
+    }
+
+    public int GetResidents()
+    {
+        return residents.Count;
+    }
+
     public void RemoveResident(Citizen citizen) {
         residents.Remove(citizen);
     }

@@ -5,19 +5,22 @@ using UnityEngine;
 public class Spaceport : Building {
     public GameObject citizenPrefab;
 
+    public SpaceportInfo spaceportInfo;
+    
     private static float newCitizenTimerIngameHours = 72;
     private int newCitizensNum = 1;
 
     private int spawnedCitizen = 0;
+
+    private string newCitizensTimerId;
 
     public GameObject spawnPosObj;
     void Start() {
         var rnd = new System.Random(DateTime.Now.Millisecond);
         names = names.OrderBy(x => rnd.Next()).ToArray();
 
-        string timerId = Clock.AddTimer(TimerEnded, newCitizenTimerIngameHours);
+        newCitizensTimerId = Clock.AddTimer(TimerEnded, newCitizenTimerIngameHours);
 
-        DebugPanel.AddDebug(() => { return Clock.CurrentTimerState(timerId).ToString("#.#"); }, "New Arrivals");
         DebugPanel.AddDebug(() => { return newCitizensNum.ToString(); }, "Max Arrivals");
         DebugPanel.AddDebug(() => { return ActualArrivals().ToString(); }, "Actual Arrivals");
 
@@ -29,6 +32,11 @@ public class Spaceport : Building {
     // Update is called once per frame
     void Update() {
 
+    }
+
+    public void ShowInfo()
+    {
+        spaceportInfo.Show(newCitizensTimerId, () => { return ActualArrivals();  });
     }
 
     private void TimerEnded(string id) {

@@ -54,7 +54,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5080352376394663618}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1.977}
+  m_LocalPosition: {x: 0, y: 0, z: -2.144}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8012257234090387856}
@@ -557,8 +557,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8012257234089208061}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.2292535, y: 1, z: 0.30966893}
+  m_LocalPosition: {x: 0, y: 0.9, z: 0}
+  m_LocalScale: {x: 3.2292535, y: 2.5504754, z: 0.30966893}
   m_Children: []
   m_Father: {fileID: 8012257234090387856}
   m_RootOrder: 1
@@ -650,8 +650,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8012257234090387857}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.7866797, y: -0.00999999, z: -2.5120726}
-  m_LocalScale: {x: 3.1073847, y: 0.029561166, z: 0.9622607}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 31, y: 0.3, z: 9.6}
   m_Children:
   - {fileID: 1574216663833105872}
   - {fileID: 8012257234089208060}
@@ -680,6 +680,7 @@ MonoBehaviour:
   exit: {fileID: 310465076}
   citizenPrefab: {fileID: 2664292208011795951, guid: 6f33d6d78e71d2e42ade3d255e9bb10c,
     type: 3}
+  spaceportInfo: {fileID: 0}
   spawnPosObj: {fileID: 5080352376394663618}
 --- !u!65 &1092573612
 BoxCollider:

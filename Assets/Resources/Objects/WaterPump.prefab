@@ -54,7 +54,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2086541355}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.514, y: 0, z: 0}
+  m_LocalPosition: {x: 0.096, y: -0.386, z: -0.911}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4627636843111980923}
@@ -71,9 +71,9 @@ GameObject:
   - component: {fileID: 4627636843111980923}
   - component: {fileID: 4627636843111980922}
   - component: {fileID: 4627636843111980925}
-  - component: {fileID: 4627636843111980924}
   - component: {fileID: 3629371097013587647}
   - component: {fileID: -863788470583314488}
+  - component: {fileID: 877510389}
   m_Layer: 8
   m_Name: WaterPump
   m_TagString: Building
@@ -89,8 +89,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4627636843111980927}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.2072463, y: 0.229, z: -3.3907661}
-  m_LocalScale: {x: 0.49253, y: 0.461, z: 0.43416}
+  m_LocalPosition: {x: 0, y: 2.2, z: 0}
+  m_LocalScale: {x: 5, y: 4.6, z: 4.3}
   m_Children:
   - {fileID: 2086541356}
   - {fileID: 218972595}
@@ -144,20 +144,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &4627636843111980924
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4627636843111980927}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3629371097013587647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,7 +158,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entrance: {fileID: 2086541355}
   exit: {fileID: 218972594}
-  bottom: {fileID: 0}
 --- !u!54 &-863788470583314488
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -189,3 +174,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &877510389
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4627636843111980927}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 1.9999999, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}

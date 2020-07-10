@@ -18,6 +18,7 @@ public class BuildBtn : MonoBehaviour, Placer.IPlacingListener {
         placeBtn.SetActive(false);
         uiToHide.SetActive(true);
         closeBtn.SetActive(false);
+        NavMeshController.Bake();
 
     }
 

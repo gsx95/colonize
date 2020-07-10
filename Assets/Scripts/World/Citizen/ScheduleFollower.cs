@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ScheduleFollower : MonoBehaviour
 {
+
     protected Building home = null;
     protected Building work = null;
 
@@ -18,6 +20,8 @@ public class ScheduleFollower : MonoBehaviour
     protected Building currentBuilding;
 
     protected Citizen me;
+
+    public NavMeshAgent agent;
 
     void Awake() {
         // typical schedule:   8.00 - 17.00 work  |  17.00 - 22.00 leisure time | 22.00 - 8.00 home/sleep
@@ -81,10 +85,19 @@ public class ScheduleFollower : MonoBehaviour
     }
 
     private void Walk() {
-        float step = 1.0f * Time.deltaTime;
-        var pos = walkTarget.transform.position;
+        var pos = walkTarget.entrance.transform.position;
         pos.y = transform.position.y;
-        transform.position = Vector3.MoveTowards(transform.position, pos, step);
+        if (agent.destination != pos)
+        {
+            agent.SetDestination(pos);
+            agent.isStopped = false;
+        }
+    }
+
+    private void StopWalking()
+    {
+        agent.isStopped = true;
+        agent.ResetPath();
     }
 
     private void SetSchedule() {
@@ -115,6 +128,7 @@ public class ScheduleFollower : MonoBehaviour
                 currentBuilding = building;
                 GetComponent<Renderer>().enabled = false;
                 isWalking = false;
+                StopWalking();
                 activeSchedule = targetSchedule;
             }
         }

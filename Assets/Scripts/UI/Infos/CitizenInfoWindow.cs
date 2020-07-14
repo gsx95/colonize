@@ -35,12 +35,30 @@ public class CitizenInfoWindow : MonoBehaviour
         });
     }
 
+    public void ChangeSecondWorkClicked()
+    {
+        UIController.HideArrows();
+        gameObject.SetActive(false);
+        BuildingClicker.EnableBuildingClicker<Factory>((f) => {
+            citizen.SetSecondWork(f);
+            ShowCitizen(citizen);
+        });
+    }
+    
+    public void RemoveSecondWorkClicked()
+    {
+        UIController.HideArrows();
+        gameObject.SetActive(false);
+        citizen.RemoveSecondWork();
+    }
+
     public static void ShowCitizen(Citizen citizen)
     {
         Instance.citizen = citizen;
         Instance.gameObject.SetActive(true);
         Func<Vector3> homePosFunc = null;
         Func<Vector3> workPosFunc = null;
+        Func<Vector3> work2PosFunc = null;
         if (citizen.Home())
         {
             homePosFunc = () =>
@@ -59,7 +77,16 @@ public class CitizenInfoWindow : MonoBehaviour
                 return pos;
             };
         }
-        UIController.ShowCitizenArrows(() => { return citizen.transform.position + new Vector3(0, 0.5f, 0); }, homePosFunc, workPosFunc);
+        if (citizen.SecondWorkplace())
+        {
+            work2PosFunc = () =>
+            {
+                var pos = citizen.SecondWorkplace().transform.position;
+                pos.y += 1;
+                return pos;
+            };
+        }
+        UIController.ShowCitizenArrows(() => { return citizen.transform.position + new Vector3(0, 0.5f, 0); }, homePosFunc, workPosFunc, work2PosFunc);
     }
 
     public void Hide()

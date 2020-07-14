@@ -11,6 +11,7 @@ public class Citizen : ScheduleFollower {
     void Awake()
     {
         base.me = this;
+        base.Awake();
     }
 
     void Start() {
@@ -61,8 +62,8 @@ public class Citizen : ScheduleFollower {
         }
         if (home != null)
             home.GetComponent<Housing>().RemoveResident(this);
-        if (work != null)
-            work.GetComponent<Factory>().RemoveEmployee(this);
+        if (firstWork != null)
+            firstWork.GetComponent<Factory>().RemoveEmployee(this);
         Census.RemoveCitizen(this);
         ToastBox.ShowMsg(citizenName + " died because of " + reason);
         Destroy(gameObject);
@@ -86,7 +87,7 @@ public class Citizen : ScheduleFollower {
     }
 
     public bool HasWork() {
-        return work != null;
+        return firstWork != null;
     }
 
     public int GetHunger() {

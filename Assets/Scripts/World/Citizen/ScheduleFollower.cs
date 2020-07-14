@@ -7,11 +7,18 @@ public class ScheduleFollower : MonoBehaviour
 {
 
     protected Building home = null;
-    protected Building work = null;
+
+    private Building currentWork = null;
+
+    protected Building firstWork = null;
+    protected Building secondWork = null;
 
     protected int workStart = 8;
     protected int leisureStart = 17;
     protected int sleepStart = 22;
+
+    protected int secondWorkStartHour;
+    protected int secondWorkStartMin = 30;
 
     protected Building walkTarget;
     protected bool isWalking = false;
@@ -23,7 +30,9 @@ public class ScheduleFollower : MonoBehaviour
 
     public NavMeshAgent agent;
 
-    void Awake() {
+    private bool inFirstWork = false;
+
+    public void Awake() {
         // typical schedule:   8.00 - 17.00 work  |  17.00 - 22.00 leisure time | 22.00 - 8.00 home/sleep
         // + 1 / -2 hours
         int offset = Random.Range(-2, 2);
@@ -34,11 +43,19 @@ public class ScheduleFollower : MonoBehaviour
         if (sleepStart >= 24) {
             sleepStart -= 24;
         }
+        int workHours = leisureStart - workStart;
+        int firstWorkEnd = Mathf.FloorToInt(workHours / 2f);
+        secondWorkStartHour = workStart + firstWorkEnd;
+        Debug.Log(secondWorkStartHour);
+        Debug.Log(workStart);
+        Debug.Log(firstWorkEnd);
+        Debug.Log(leisureStart);
+        Debug.Log(workStart);
     }
 
     public void Update()
     {
-        if (home == null || work == null) {
+        if (home == null || firstWork == null) {
             SearchHomeAndWork();
         }
         SetSchedule();
@@ -62,16 +79,41 @@ public class ScheduleFollower : MonoBehaviour
 
     public Building Workplace()
     {
-        return work;
+        return firstWork;
+    }
+
+    public Building SecondWorkplace()
+    {
+        return secondWork;
     }
 
     public void SetWork(Factory factory)
     {
-        work.GetComponent<Factory>().RemoveEmployee(me);
-        work = factory;
+        if (firstWork != null)
+            firstWork.GetComponent<Factory>().RemoveEmployee(me);
+        factory.GetComponent<Factory>().AddEmployee(me);
+        firstWork = factory;
         walkTarget = null;
         targetSchedule = Schedule.NONE;
         activeSchedule = Schedule.NONE;
+    }
+
+    public void SetSecondWork(Factory factory)
+    {
+        if(secondWork != null)
+            secondWork.GetComponent<Factory>().RemoveEmployee(me);
+        factory.GetComponent<Factory>().AddEmployee(me);
+        secondWork = factory;
+        walkTarget = null;
+        targetSchedule = Schedule.NONE;
+        activeSchedule = Schedule.NONE;
+    }
+
+    public void RemoveSecondWork()
+    {
+        if(secondWork != null)
+            secondWork.GetComponent<Factory>().RemoveEmployee(me);
+        secondWork = null;
     }
     // Schedule //
 
@@ -108,12 +150,28 @@ public class ScheduleFollower : MonoBehaviour
             return;
         }
 
-        if (currentTime.hour >= leisureStart || work == null) {
+        if (currentTime.hour >= leisureStart || firstWork == null) {
             LeisureTime();
             return;
         }
-
+        Debug.Log(currentTime.hour + "  >=  " + workStart);
         if (currentTime.hour >= workStart) {
+            currentWork = firstWork;
+            if(secondWork != null && ((currentTime.hour > secondWorkStartHour) ||(currentTime.hour == secondWorkStartHour && currentTime.minute >= secondWorkStartMin)))
+            {
+                if(inFirstWork)
+                {
+                    Debug.Log("start 2nd work  " + secondWorkStartHour + "  " + currentTime.hour);
+                    activeSchedule = Schedule.NONE;
+                    targetSchedule = Schedule.NONE;
+                }
+                Debug.Log("do 2nd work");
+                inFirstWork = false;
+                currentWork = secondWork;
+            } else
+            {
+                inFirstWork = true;
+            }
             WorkTime();
             return;
         }
@@ -192,7 +250,7 @@ public class ScheduleFollower : MonoBehaviour
         }
         if (isInWrongBuilding || activeSchedule == Schedule.NONE)
         {
-            walkTarget = work;
+            walkTarget = currentWork;
             isWalking = true;
             GetComponent<Renderer>().enabled = true;
             targetSchedule = Schedule.WORK;
@@ -210,11 +268,11 @@ public class ScheduleFollower : MonoBehaviour
             }
         }
 
-        if (home != null && work == null) {
+        if (home != null && firstWork == null) {
             var employer = LabourOffice.GetVacantEmployer();
             if (employer != null) {
                 employer.AddEmployee(me);
-                work = employer;
+                firstWork = employer;
             }
         }
     }

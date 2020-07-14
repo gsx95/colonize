@@ -24,9 +24,9 @@ public class Spaceport : Building {
         DebugPanel.AddDebug(() => { return newCitizensNum.ToString(); }, "Max Arrivals");
         DebugPanel.AddDebug(() => { return ActualArrivals().ToString(); }, "Actual Arrivals");
 
-        SpawnNew(8);
-        Clock.AddOneTimeTimer((s) => { SpawnNew(8); }, 4);
-        Clock.AddOneTimeTimer((s) => { SpawnNew(8); }, 8);
+        SpawnNew();
+        //Clock.AddOneTimeTimer((s) => { SpawnNew(8); }, 4);
+        //Clock.AddOneTimeTimer((s) => { SpawnNew(8); }, 8);
     }
 
     // Update is called once per frame
@@ -42,11 +42,11 @@ public class Spaceport : Building {
     private void TimerEnded(string id) {
         int actualArrivals = ActualArrivals();
         for (int i = 0; i < actualArrivals; i++) {
-            SpawnNew();
+           // SpawnNew();
         }
     }
 
-    private void SpawnNew(int workStart = -1) {
+    private void SpawnNew() {
 
         var posY = citizenPrefab.transform.position.y;
         var newC = Instantiate(citizenPrefab, exit.transform.position, Quaternion.identity);
@@ -56,9 +56,6 @@ public class Spaceport : Building {
         spawnedCitizen++;
         Census.AddCitizen(newC.GetComponent<Citizen>());
         ToastBox.ShowMsg(newC.GetComponent<Citizen>().Name() + " arrived.");
-        if(workStart != -1) {
-            newC.GetComponent<Citizen>().ChangeSchedule(workStart);
-        }
     }
 
     private int ActualArrivals() {

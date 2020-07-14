@@ -42,6 +42,7 @@ public class BuildingClicker : MonoBehaviour
                         if (hit.collider.gameObject.TryGetComponent<BuildingType>(out building))
                         {
                             buildingClicked(building);
+                            DisableBuildingClicker();
                         }
                     }
                 }

@@ -7,13 +7,17 @@ public class UIController : MonoBehaviour
 
     public GameObject arrowHome;
     public GameObject arrowWork;
+    public GameObject arrowWork2;
     public GameObject arrowCitizen;
 
     private static UIController Instance;
 
     private Func<Vector3> homeFunc = null;
     private Func<Vector3> workFunc = null;
+    private Func<Vector3> secondWorkPosFunc = null;
     private Func<Vector3> citizenFunc = null;
+    
+    
 
     void Awake()
     {
@@ -23,6 +27,7 @@ public class UIController : MonoBehaviour
     {
         arrowHome.SetActive(false);
         arrowWork.SetActive(false);
+        arrowWork2.SetActive(false);
         arrowCitizen.SetActive(false);
     }
 
@@ -42,6 +47,13 @@ public class UIController : MonoBehaviour
             arrowWork.SetActive(true);
         }
 
+        if (secondWorkPosFunc != null)
+        {
+            var workPos = secondWorkPosFunc();
+            arrowWork2.transform.position = Camera.main.WorldToScreenPoint(workPos);
+            arrowWork2.SetActive(true);
+        }
+
         if (citizenFunc != null)
         {
             var citizenPos = citizenFunc();
@@ -59,22 +71,25 @@ public class UIController : MonoBehaviour
     {
         this.homeFunc = null;
         this.workFunc = null;
+        this.secondWorkPosFunc = null;
         this.citizenFunc = null;
         arrowHome.SetActive(false);
         arrowWork.SetActive(false);
+        arrowWork2.SetActive(false);
         arrowCitizen.SetActive(false);
     }
 
-    public static void ShowCitizenArrows(Func<Vector3> citizenPosFunc, Func<Vector3> homePosFunc, Func<Vector3> workPosFunc)
+    public static void ShowCitizenArrows(Func<Vector3> citizenPosFunc, Func<Vector3> homePosFunc, Func<Vector3> workPosFunc, Func<Vector3> secondWorkPosFunc)
     {
-        Instance.ShowArrows(citizenPosFunc, homePosFunc, workPosFunc);
+        Instance.ShowArrows(citizenPosFunc, homePosFunc, workPosFunc, secondWorkPosFunc);
     }
 
-    private void ShowArrows(Func<Vector3> citizenPosFunc, Func<Vector3> homePosFunc, Func<Vector3> workPosFunc)
+    private void ShowArrows(Func<Vector3> citizenPosFunc, Func<Vector3> homePosFunc, Func<Vector3> workPosFunc, Func<Vector3> secondWorkPosFunc)
     {
         this.homeFunc = homePosFunc;
         this.workFunc = workPosFunc;
         this.citizenFunc = citizenPosFunc;
+        this.secondWorkPosFunc = secondWorkPosFunc;
 
     }
 }
